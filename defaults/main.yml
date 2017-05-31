@@ -1,7 +1,7 @@
 ---
 # defaults file for roles/omero-logmonitor
 
-omero_logmonitor_basedir: /home/omero/logmonitor
+omero_logmonitor_basedir: "{{ omero_common_basedir }}/logmonitor"
 omero_logmonitor_venv: "{{ omero_logmonitor_basedir }}/venv"
 omero_logmonitor_logbotdir: "{{ omero_logmonitor_basedir }}/omero-fenton"
 
@@ -15,16 +15,23 @@ omero_logmonitor_email_oom: False
 #omero_logmonitor_email_to: alert@example.org
 
 # The display name for this server, can be overridden by individual log configs
-omero_logmonitor_server_name: omero-server
+omero_logmonitor_server_name: omero
 
 # If True enable and autostart/restart the bot, otherwise disable and stop
 omero_logmonitor_autostart: True
 
 # System user for running the bot
-omero_logmonitor_system_user: omero
+omero_logmonitor_system_user: omero-logmonitor
 
-# OMERO.server logs directory, used in the default configuration below
-omero_logmonitor_logs_dir: /home/omero/OMERO.server/var/log
+# OMERO.server logs directory, used in the default configuration
+omero_logmonitor_logs_dir_server: "{{ omero_common_basedir }}/server/OMERO.server/var/log"
+
+# OMERO.web logs directory, used in the default configuration
+omero_logmonitor_logs_dir_web: "{{ omero_common_basedir }}/web/OMERO.web/var/log"
+
+######################################################################
+# Expert users only!
+######################################################################
 
 # Log files to be monitored
 # Defaults for each item:
@@ -34,18 +41,29 @@ omero_logmonitor_logs_dir: /home/omero/OMERO.server/var/log
 #  - file: logs/example.log
 #    displayname: example server log
 #    levels: [WARN, ERROR, FATAL]
-omero_logmonitor_logfiles:
-  - file: "{{ omero_logmonitor_logs_dir }}/Blitz-0.log"
-  - file: "{{ omero_logmonitor_logs_dir }}/DropBox.log"
-  - file: "{{ omero_logmonitor_logs_dir }}/FileServer.log"
-  - file: "{{ omero_logmonitor_logs_dir }}/Indexer-0.log"
-  - file: "{{ omero_logmonitor_logs_dir }}/MonitorServer.log"
-  - file: "{{ omero_logmonitor_logs_dir }}/OMEROweb.log"
-  - file: "{{ omero_logmonitor_logs_dir }}/OMEROweb_request.log"
-  - file: "{{ omero_logmonitor_logs_dir }}/PixelData-0.log"
-  - file: "{{ omero_logmonitor_logs_dir }}/Processor-0.log"
-  - file: "{{ omero_logmonitor_logs_dir }}/Tables-0.log"
-  - file: "{{ omero_logmonitor_logs_dir }}/master.err"
+omero_logmonitor_logfiles: >
+  {{
+    ((omero_logmonitor_logs_dir_server | length > 0) |
+      ternary(omero_logmonitor_logfiles_server, [])) +
+    ((omero_logmonitor_logs_dir_web | length > 0) |
+      ternary(omero_logmonitor_logfiles_web, []))
+  }}
+
+
+omero_logmonitor_logfiles_server:
+  - file: "{{ omero_logmonitor_logs_dir_server }}/Blitz-0.log"
+  - file: "{{ omero_logmonitor_logs_dir_server }}/DropBox.log"
+  - file: "{{ omero_logmonitor_logs_dir_server }}/FileServer.log"
+  - file: "{{ omero_logmonitor_logs_dir_server }}/Indexer-0.log"
+  - file: "{{ omero_logmonitor_logs_dir_server }}/MonitorServer.log"
+  - file: "{{ omero_logmonitor_logs_dir_server }}/PixelData-0.log"
+  - file: "{{ omero_logmonitor_logs_dir_server }}/Processor-0.log"
+  - file: "{{ omero_logmonitor_logs_dir_server }}/Tables-0.log"
+  - file: "{{ omero_logmonitor_logs_dir_server }}/master.err"
     type: logall
-  - file: "{{ omero_logmonitor_logs_dir }}/master.out"
+  - file: "{{ omero_logmonitor_logs_dir_server }}/master.out"
     type: logall
+
+omero_logmonitor_logfiles_web:
+  - file: "{{ omero_logmonitor_logs_dir_web }}/OMEROweb.log"
+  - file: "{{ omero_logmonitor_logs_dir_web }}/OMEROweb_request.log"

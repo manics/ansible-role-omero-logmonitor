@@ -18,6 +18,24 @@
     virtualenv: "{{ omero_logmonitor_venv }}"
     virtualenv_site_packages: yes
 
+- name: omero logmonitor | create system user
+  become: yes
+  user:
+    name: "{{ omero_logmonitor_system_user }}"
+    home: "{{ omero_logmonitor_basedir }}"
+    createhome: no
+    state: present
+    system: yes
+
+
+- name: omero logmonitor | create logmonitor directories
+  become: yes
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ omero_logmonitor_basedir }}"
+
 - name: omero logmonitor | get logmonitor
   become: yes
   git:
