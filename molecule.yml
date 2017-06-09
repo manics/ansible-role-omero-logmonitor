@@ -1,4 +1,13 @@
 ---
+# FIXME: currently skipping idempotence
+test:
+  sequence:
+    - destroy
+    - syntax
+    - create
+    - converge
+    - verify
+      
 dependency:
   name: galaxy
   requirements_file: tests/requirements.yml
