@@ -30,17 +30,16 @@ Optional variables:
 - `omero_logmonitor_email_smtp`: SMTP server
 - `omero_logmonitor_email_from`: From address for email alerts
 - `omero_logmonitor_email_to`: To address for email alerts@example.org
-- `omero_logmonitor_logs_dir`: Base directory of the OMERO.server logs
+- `omero_logmonitor_logs_dir_server`: Base directory of the OMERO.server logs, set to `""` to disable monitoring
+- `omero_logmonitor_logs_dir_web`: Base directory of the OMERO.web logs, set to `""` to disable monitoring
 - `omero_logmonitor_logfiles`: Dictionaries of log file monitoring parameters
 
 See `defaults/main.yml` for the full list of optional variables.
-This is particular important if you are using a modified OMERO configuration with log files in a different location, or with non-standard logfiles.
+This is particularly important if you are using a modified OMERO configuration with log files in a different location, or with non-standard logfiles.
 
 
 Example Playbook
 ----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
     - hosts: localhost
       roles:

@@ -10,4 +10,6 @@ galaxy_info:
     - 7
   galaxy_tags: []
 
-dependencies: []
+dependencies:
+- name: openmicroscopy.omero-common
+  src: openmicroscopy.omero-common

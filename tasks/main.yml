@@ -18,6 +18,23 @@
     virtualenv: "{{ omero_logmonitor_venv }}"
     virtualenv_site_packages: yes
 
+- name: omero logmonitor | create system user
+  become: yes
+  user:
+    name: "{{ omero_logmonitor_system_user }}"
+    home: "{{ omero_logmonitor_basedir }}"
+    createhome: no
+    state: present
+    system: yes
+
+- name: omero logmonitor | create logmonitor directories
+  become: yes
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ omero_logmonitor_basedir }}"
+
 - name: omero logmonitor | get logmonitor
   become: yes
   git:
@@ -26,6 +43,9 @@
     # depth: 1
     dest: "{{ omero_logmonitor_logbotdir }}"
     repo: https://github.com/manics/omero-fenton.git
+  tags:
+  # TODO: Fix this by tagging the repo
+  - skip_ansible_lint
 
 - name: omero logmonitor | create configuration file
   become: yes
@@ -48,6 +68,9 @@
   become: yes
   command: systemctl daemon-reload
   when: omero_systemd_logmonitor.changed
+  tags:
+  # TODO: Fix this by converting to a handler
+  - skip_ansible_lint
 
 - name: omero | enable logmonitor systemd
   become: yes

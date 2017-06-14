@@ -1,4 +1,7 @@
 ---
+# TODO: molecule test is currently disabled since it fails,
+# probably due to lack of a Slack token for RTM
+
 language: python
 python: "2.7"
 
@@ -13,7 +16,7 @@ addons:
 
 install:
   # Install ansible
-  - pip install ansible
+  - pip install ome-ansible-molecule-dependencies
 
   # Check ansible version
   - ansible --version
@@ -21,9 +24,12 @@ install:
   # Create ansible.cfg with correct roles_path
   - printf '[defaults]\nroles_path=../' >ansible.cfg
 
+  - ansible-galaxy install -r tests/requirements.yml -p tests/roles
+
 script:
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
+  - ansible-lint tests/test.yml
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
