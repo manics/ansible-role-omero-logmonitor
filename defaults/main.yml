@@ -5,6 +5,8 @@ omero_logmonitor_basedir: "{{ omero_common_basedir }}/logmonitor"
 omero_logmonitor_venv: "{{ omero_logmonitor_basedir }}/venv"
 omero_logmonitor_logbotdir: "{{ omero_logmonitor_basedir }}/omero-fenton"
 
+omero_logmonitor_version: HEAD
+
 omero_logmonitor_default_levels:
   - ERROR
   - FATAL

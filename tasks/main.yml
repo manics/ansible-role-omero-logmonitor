@@ -43,6 +43,7 @@
     # depth: 1
     dest: "{{ omero_logmonitor_logbotdir }}"
     repo: https://github.com/manics/omero-fenton.git
+    version: "{{ omero_logmonitor_version }}"
   tags:
   # TODO: Fix this by tagging the repo
   - skip_ansible_lint
